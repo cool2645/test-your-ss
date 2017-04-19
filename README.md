@@ -2,61 +2,8 @@
 
 This project generally contains the following features.
 
-+ Database API
-    + The program can be granted with ss-panel v3 database access. 
-        - groups
-        <table>
-          <tr>
-            <th>Key</th>
-            <th>Type</th>
-          </tr>
-          <tr>
-            <td>id</td>
-            <td>integer</td>
-          </tr>
-          <tr>
-            <td>group_name</td>
-            <td>string</td>
-          </tr>
-          <tr>
-            <td>user</td>
-            <td>string</td>
-          </tr>
-          <tr>
-            <td>password</td>
-            <td>string</td>
-          </tr>
-          <tr>
-            <td>database</td>
-            <td>string</td>
-          </tr>
-        </table>
-    + Return json config file if user authenticated.
 + User Interface
-    + Users can either select address from accessed website or provide a json config file themselves.
-      - nodes
-        <table>
-          <tr>
-            <th>Key</th>
-            <th>Type</th>
-          </tr>
-          <tr>
-            <td>id</td>
-            <td>integer</td>
-          </tr>
-          <tr>
-            <td>address</td>
-            <td>string</td>
-          </tr>
-          <tr>
-            <td>ipv4_ip</td>
-            <td>string</td>
-          </tr>
-          <tr>
-            <td>group_id</td>
-            <td>integer</td>
-          </tr>
-        </table>
+    + Users can either select address from accessed website with mu api v2 support or provide a json config file themselves.
     + Users can choose one docker they prefer from all dockers provided by the program.
       - dockers
         <table>
@@ -89,7 +36,7 @@ This project generally contains the following features.
               <td>integer</td>
             </tr>
             <tr>
-              <td>node_id</td>
+              <td>node_ip</td>
               <td>integer</td>
             </tr>
             <tr>
@@ -117,26 +64,6 @@ This project generally contains the following features.
     + Once jobs are created, status can be synced by the front-end with the polling strategy. 
     In other words, there should be a status api.
     + After job run, success or failure should be judged.
-    + Once failure, alert the system administrator.
-      - admins
-          <table>
-            <tr>
-              <th>Key</th>
-              <th>Type</th>
-            </tr>
-            <tr>
-              <td>id</td>
-              <td>integer</td>
-            </tr>
-            <tr>
-              <td>group_id</td>
-              <td>integer</td>
-            </tr>
-            <tr>
-              <td>email</td>
-              <td>string</td>
-            </tr>
-          </table>
       
 + Docker Image
     + shadowsocks-pip
@@ -153,6 +80,6 @@ This project generally contains the following features.
 Some other details.
 
 + Docker images base on Alpine Linux.
-+ For each test we use python client and curl myip.ipip.net with proxychains, assert if the result is similar with ipv4_ip/ping result.
++ For each test we use python client and curl [http://ipv4.vm0.test-ipv6.com/ip/](http://ipv4.vm0.test-ipv6.com/ip/) and [http://ipv6.vm0.test-ipv6.com/ip/](http://ipv6.vm0.test-ipv6.com/ip/) with proxychains, assert if the result is similar with ping/ping6 result.
 + Cron job could use Travis CI.
 + Captcha is required for launching jobs.
