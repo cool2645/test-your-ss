@@ -36,8 +36,12 @@ This project generally contains the following features.
               <td>integer</td>
             </tr>
             <tr>
-              <td>node_ip</td>
-              <td>integer</td>
+              <td>node_ip4</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>node_ip6</td>
+              <td>string</td>
             </tr>
             <tr>
               <td>port</td>
@@ -57,7 +61,7 @@ This project generally contains the following features.
             </tr>
             <tr>
               <td>log</td>
-              <td>text</td>
+              <td>longText</td>
             </tr>
           </table>
     + With administrator key you can create jobs without limit and cut queue.
