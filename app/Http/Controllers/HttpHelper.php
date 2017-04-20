@@ -11,7 +11,17 @@ class HttpHelper extends Controller
 
     }
 
+    public function getSSNodesByMuApiV2()
+    {
+
+    }
+
     public function getSSConfigByMuApiV2()
+    {
+
+    }
+
+    public function getSSRNodesBy2645NetWork()
     {
 
     }
