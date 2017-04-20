@@ -1,89 +1,41 @@
 # Test Your Shadowsocks
 
-This project generally contains the following features.
+A web interface that you can launch jobs testing your shadowsocks/shadowsocksR service.
 
-+ User Interface
-    + Users can either select address from accessed website with mu api v2 support or provide a json config file themselves.
-    + Users can choose one docker they prefer from all dockers provided by the program.
-      - dockers
-        <table>
-          <tr>
-            <th>Key</th>
-            <th>Type</th>
-          </tr>
-          <tr>
-            <td>id</td>
-            <td>integer</td>
-          </tr>
-          <tr>
-            <td>name</td>
-            <td>string</td>
-          </tr>
-          <tr>
-            <td>description</td>
-            <td>text</td>
-          </tr>
-        </table>
-    + Users are able to launch a number of requests in certain time.
-      - jobs
-          <table>
-            <tr>
-              <th>Key</th>
-              <th>Type</th>
-            </tr>
-            <tr>
-              <td>id</td>
-              <td>integer</td>
-            </tr>
-            <tr>
-              <td>node_ip4</td>
-              <td>string</td>
-            </tr>
-            <tr>
-              <td>node_ip6</td>
-              <td>string</td>
-            </tr>
-            <tr>
-              <td>port</td>
-              <td>integer</td>
-            </tr>
-            <tr>
-              <td>docker_id</td>
-              <td>integer</td>
-            </tr>
-            <tr>
-              <td>request_ip</td>
-              <td>string</td>
-            </tr>
-            <tr>
-              <td>status</td>
-              <td>string</td>
-            </tr>
-            <tr>
-              <td>log</td>
-              <td>longText</td>
-            </tr>
-          </table>
-    + With administrator key you can create jobs without limit and cut queue.
-    + Once jobs are created, status can be synced by the front-end with the polling strategy. 
-    In other words, there should be a status api.
-    + After job run, success or failure should be judged.
-      
-+ Docker Image
-    + shadowsocks-pip
-    + shadowsocks-master
-    + shadowsocks-release
-    + shadowsocksR-master
-    + shadowsocksR-release
-+ Cron Job
-    + update docker images
-    
+The program has to work with a test host compatible with the api.
 
-<hr>
+Currently available test host:
 
-Some other details.
+ NULL
 
-+ Docker images base on Alpine Linux.
-+ For each test we use python client and curl [http://ipv4.vm0.test-ipv6.com/ip/](http://ipv4.vm0.test-ipv6.com/ip/) and [http://ipv6.vm0.test-ipv6.com/ip/](http://ipv6.vm0.test-ipv6.com/ip/) with proxychains, assert if the result is similar with ping/ping6 result.
-+ Cron job could use Travis CI.
-+ Captcha is required for launching jobs.
+Under development test host:
+
++ [test-your-ss-host](https://github.com/2645Corp/test-your-ss-host)
++ [test-your-ss-host-go](https://github.com/2645Corp/test-your-ss-host-go)
+
+## About SS Config
+
+The program supports several method of getting ss/ssr config.
+
++ Provide a **JSON FILE**
++ **Mu Api V2** (ss-panel v3)
++ 2645Network SSR
+
+Since different site has their own (but not quite the same) SSR strategy.
+We cannot provide a general ssr config method.
+You're welcomed to add your ssr mu config method. Just open a pull request.
+
+## About Docker
+
+We currently have those docker images that could be used:
+
++ [cool2645/shadowsocks-pip](https://hub.docker.com/r/cool2645/shadowsocks-pip/)
++ [cool2645/shadowsocksr-master](https://hub.docker.com/r/cool2645/shadowsocksr-master/)
+
+You're welcomed to make your own docker image.
+
+A sufficient docker should have the following commands available for `/bin/sh`
+
++ sslocal
++ proxychains
++ curl

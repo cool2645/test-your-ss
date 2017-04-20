@@ -6,12 +6,17 @@ use Illuminate\Http\Request;
 
 class HttpHelper extends Controller
 {
-    public function getSSConfigByMuApi()
+    public function getNodeIP()
     {
 
     }
 
-    public function getNodeIP()
+    public function getSSConfigByMuApiV2()
+    {
+
+    }
+
+    public function getSSRConfigBy2645Network()
     {
 
     }

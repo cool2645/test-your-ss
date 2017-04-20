@@ -18,7 +18,7 @@ class CreateJobsTable extends Migration
             $table->string('node_ip4');
             $table->string('node_ip6');
             $table->integer('port');
-            $table->integer('docker_id');
+            $table->string('docker');
             $table->string('request_ip');
             $table->string('status');
             $table->longText('log');

@@ -18,7 +18,12 @@ class JobController extends Controller
 
     public function getJobStatus()
     {
-        
+
+    }
+
+    public function getQueuingJobs()
+    {
+
     }
 
     public function assignJob()
