@@ -114,7 +114,7 @@
                         else {
                             $("#selectNode").html('');
                             for(i in dataObj.data) {
-                                $("#selectNode").append("<option value=" + dataObj.data[i] + ">" + dataObj.data[i] + "</option>");
+                                $("#selectNode").append("<option value=" + dataObj.data[i].node_name + ":" + dataObj.data[i].node_method + ">" + dataObj.data[i].node_name + "</option>");
                             }
                         }
                     },

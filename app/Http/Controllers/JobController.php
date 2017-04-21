@@ -23,34 +23,59 @@ class JobController extends Controller
 
     public function createJob(Request $request)
     {
+        $this->validate($request, [
+            "config" => "required",
+            "docker" => "required"
+        ]);
         switch ($request->config) {
             case "json":
-                $data = json_decode($request->json, true);
-                $ip = HttpHelper::getNodeIP($data['server']);
-                if ((isset($request->admin_key) && $request->admin_key == env('ADMIN_KEY'))
-                    || $this->check($ip[0], $data['server_port'], $request->docker)
-                ) {
-                    if ($ip[0]) {
-                        $job = new Job();
-                        $job->node_ip = $ip[0];
-                        $job->node_ip4 = $ip[1];
-                        $job->node_ip6 = $ip[2];
-                        $job->port = $data['server_port'];
-                        $job->docker = $request->docker;
-                        $job->config = $request->json;
-                        $job->time = time();
-                        $job->request_ip = $request->ip();
-                        $job->status = "Queuing";
-                        $job->save();
-                        return json_encode(['result' => true, 'data' => ['ip' => $ip[0], 'ip4' => $ip[1], 'ip6' => $ip[2]]]);
-                    }
-                    else
-                        return json_encode(['result' => false, 'msg' => "Unknown host", 'data' => ['ip' => $ip[0], 'ip4' => $ip[1], 'ip6' => $ip[2]]]);
-                } else
-                    return json_encode(['result' => false, 'msg' => 'You can only open ' . env('ALLOW_TIMES', 3) . " times in " . env('ALLOW_EACH_HOUR', 5) . " hours."]);
+                $this->validate($request, [
+                    "json" => "required"
+                ]);
+                $json = $request->json;
+                break;
+            case "mu_api_v2":
+                $this->validate($request, [
+                    "website" => "required",
+                    "email" => "required",
+                    "password" => "required"
+                ]);
+                $json = HttpHelper::getSSConfigByMuApiV2($request->website, $request->email, $request->password, $request->node);
+                break;
+            case "2645network_ssr":
+                $this->validate($request, [
+                    "website" => "required",
+                    "email" => "required",
+                    "password" => "required"
+                ]);
+                $json = HttpHelper::getSSRConfigBy2645Network($request->website, $request->email, $request->password, $request->node);
                 break;
 
         }
+        $data = json_decode($json, true);
+        $ip = HttpHelper::getNodeIP($data['server']);
+        if ((isset($request->admin_key) && $request->admin_key == env('ADMIN_KEY'))
+            || $this->check($ip[0], $data['server_port'], $request->docker)
+        ) {
+            if ($ip[0]) {
+                $job = new Job();
+                $job->node_ip = $ip[0];
+                $job->node_ip4 = $ip[1];
+                $job->node_ip6 = $ip[2];
+                $job->port = $data['server_port'];
+                $job->docker = $request->docker;
+                $job->config = $json;
+                $job->time = time();
+                $job->request_ip = $request->ip();
+                $job->status = "Queuing";
+                $job->save();
+                return json_encode(['result' => true, 'data' => ['ip' => $ip[0], 'ip4' => $ip[1], 'ip6' => $ip[2]]]);
+            }
+            else
+                return json_encode(['result' => false, 'msg' => "Unknown host", 'data' => ['ip' => $ip[0], 'ip4' => $ip[1], 'ip6' => $ip[2]]]);
+        } else
+            return json_encode(['result' => false, 'msg' => 'You can only open ' . env('ALLOW_TIMES', 3) . " times in " . env('ALLOW_EACH_HOUR', 5) . " hours."]);
+
     }
 
     public function getJobList()
