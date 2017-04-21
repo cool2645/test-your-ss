@@ -64,8 +64,8 @@
                 <label for="selectDocker" class="col-sm-2 control-label">Docker</label>
                 <div class="col-sm-10">
                     <select id="selectDocker" class="form-control">
-                        <option value="cool2645/shadowsocks-pip">cool2645/shadowsocks-pip</option>
-                        <option value="cool2645/shadowsocksr-master">cool2645/shadowsocksr-master</option>
+                        <option id="docker_ss" value="cool2645/shadowsocks-pip">cool2645/shadowsocks-pip</option>
+                        <option id="docker_ssr" value="cool2645/shadowsocksr-master">cool2645/shadowsocksr-master</option>
                     </select>
                 </div>
             </div>
@@ -82,10 +82,14 @@
                 if($("#selectConfig").val() == "mu_api_v2") {
                     $("#config-box-mu").css("display", "initial");
                     $("#config-box-json").css("display", "none");
+                    $("#docker_ssr").removeAttr("selected");
+                    $("#docker_ss").prop("selected", "selected");
                 }
                 else if($("#selectConfig").val() == "2645network_ssr") {
                     $("#config-box-mu").css("display", "initial");
                     $("#config-box-json").css("display", "none");
+                    $("#docker_ss").removeAttr("selected");
+                    $("#docker_ssr").prop("selected", "selected");
                 }
                 else if($("#selectConfig").val() == "json") {
                     $("#config-box-mu").css("display", "none");
