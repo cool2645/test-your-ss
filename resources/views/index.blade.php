@@ -9,8 +9,12 @@
             <li role="presentation"><a href="/status">Job Status</a></li>
             <li role="presentation"><a href="/about">About</a></li>
         </ul>
-        <form class="form-horizontal">
-            <div class="form-group" style="margin-top: 20px">
+        <form class="form-horizontal" style="padding-top: 20px">
+            <div class="alert alert-warning fade in" style="display: none;">
+                <a href="#" class="close" onclick="$('.alert').hide()">&times;</a>
+                <span><strong>Warning!</strong> There was a problem with your network connection.</span>
+            </div>
+            <div class="form-group">
                 <div class="col-sm-12">
                     <select id="config-select" class="form-control">
                         <option value="mu_api_v2" selected>Mu Api v2</option>
@@ -23,24 +27,27 @@
                 <div class="form-group">
                     <label for="website" class="col-sm-2 control-label">API URL</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="website" placeholder="The http/https must be correct! Eg. https://ss-panel.org/mu">
+                        <input type="text" class="form-control" id="website" placeholder="Eg. https://ss-panel.org/api The http/https must be correct!">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+                    <label for="email" class="col-sm-2 control-label">Email</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                        <input type="email" class="form-control" id="email" placeholder="Email">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                    <label for="password" class="col-sm-2 control-label">Password</label>
                     <div class="col-sm-10">
-                        <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                        <input type="password" class="form-control" id="password" placeholder="Password">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="selectNode" class="col-sm-2 control-label">Node</label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-4">
+                        <button type="button" id="refresh-node-list-btn" class="btn btn-primary form-control">Refresh Node List</button>
+                    </div>
+                    <div class="col-sm-6">
                         <select id="selectNode" class="form-control">
                         </select>
                     </div>
@@ -57,10 +64,13 @@
                 <label for="selectDocker" class="col-sm-2 control-label">Docker</label>
                 <div class="col-sm-10">
                     <select id="selectDocker" class="form-control">
-                        <option>SS</option>
-                        <option>SSR</option>
+                        <option value="cool2645/shadowsocks-pip">cool2645/shadowsocks-pip</option>
+                        <option value="cool2645/shadowsocksr-master">cool2645/shadowsocksr-master</option>
                     </select>
                 </div>
+            </div>
+            <div class="col-sm-4 col-sm-offset-4">
+                <button type="button" class="btn btn-primary form-control">Launch a test Job</button>
             </div>
         </form>
 
@@ -81,6 +91,43 @@
                     $("#config-box-mu").css("display", "none");
                     $("#config-box-json").css("display", "initial");
                 }
+            });
+            $("#refresh-node-list-btn").click(function () {
+                $.ajax({
+                    url: "/node/" + $("#config-select").val(),
+                    method: "POST",
+                    data: {
+                        website: $("#website").val(),
+                        email: $("#email").val(),
+                        password: $("#password").val()
+                    },
+                    success: function (msg) {
+                        var dataObj = eval("(" + msg + ")");
+                        if(dataObj == null) {
+                            $(".alert span").html("A exception occurred, you might inputted a wrong api url.");
+                            $(".alert").show();
+                        }
+                        if(!dataObj.result) {
+                            $(".alert span").html(dataObj.msg);
+                            $(".alert").show();
+                        }
+                        else {
+                            $("#selectNode").html('');
+                            for(i in dataObj.data) {
+                                $("#selectNode").append("<option value=" + dataObj.data[i] + ">" + dataObj.data[i] + "</option>");
+                            }
+                        }
+                    },
+                    error: function (xhr) {
+                        if (xhr.status == 422) {
+                            $(".alert span").html("You should check in on some of those fields below.");
+                            $(".alert").show();
+                        } else {
+                            $(".alert span").html("Undefined error.");
+                            $(".alert").show();
+                        }
+                    }
+                })
             });
         })
     </script>
