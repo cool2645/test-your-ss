@@ -106,8 +106,20 @@ class JobController extends Controller
     public function assignJob(Request $request, $id)
     {
         $job = Job::find($id);
-        $job->status = "Starting";
+        if ($job->status != "Queuing")
+            return json_encode(['result' => false, 'msg' => "locked"]);
         $job->run_host = $request->run_host;
+        $job->status = "Starting";
+        $job->save();
+        return json_encode(['result' => true, 'msg' => "success"]);
+    }
+
+    public function cancelJob($id)
+    {
+        $job = Job::find($id);
+        $job->status = "Queuing";
+        $job->run_host = null;
+        $job->log = null;
         $job->save();
         return json_encode(['result' => true, 'msg' => "success"]);
     }
@@ -131,5 +143,28 @@ class JobController extends Controller
     public function judge()
     {
         //
+    }
+
+    public function reRun(Request $request, $id)
+    {
+        $job = Job::find($id);
+        if ((isset($request->admin_key) && $request->admin_key == env('ADMIN_KEY'))
+            || $this->check($job->node_ip, $job->port, $job->docker)
+        ) {
+            $job1 = new Job();
+            $job1->node_addr = $job->node_addr;
+            $job1->node_ip = $job->node_ip;
+            $job1->node_ip4 = $job->node_ip4;
+            $job1->node_ip6 = $job->node_ip6;
+            $job1->port = $job->port;
+            $job1->docker = $job->docker;
+            $job1->config = $job->config;
+            $job1->time = time();
+            $job1->request_ip = $request->ip();
+            $job1->status = "Queuing";
+            $job1->save();
+            return json_encode(['result' => true, 'msg' => "success"]);
+        } else
+            return json_encode(['result' => false, 'msg' => 'You can only open ' . env('ALLOW_TIMES', 3) . " times in " . env('ALLOW_EACH_HOUR', 5) . " hours."]);
     }
 }

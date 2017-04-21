@@ -25,7 +25,7 @@
                 <label class="col-sm-2 control-label">Log</label>
                 <div class="col-sm-10" style="padding-top: 7px">
                     @if(isset($job->log))
-                        <p>{{ $job->log }}</p>
+                        <pre style="word-wrap: break-word; white-space: pre-wrap; white-space: -moz-pre-wrap">{{ $job->log }}</pre>
                     @else
                         <p>No log currently.</p>
                     @endif

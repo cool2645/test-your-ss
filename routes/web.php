@@ -21,10 +21,12 @@ Route::get('api/jobs/{id}', 'JobController@getJobStatus');
 Route::get('api/jobs/{id}/log', 'JobController@showJobLog');
 Route::post('api/jobs', 'JobController@createJob');
 Route::get('api/jobs/{id}/judge', 'JobController@judge');
+Route::put('api/jobs/{id}', 'JobController@reRun');
 
 Route::group(['middleware' => 'apiauth'], function () {
     Route::post('api/jobs/{id}', 'JobController@assignJob');
     Route::post('api/jobs/{id}/log', 'JobController@syncJobLog');
+    Route::delete('api/jobs/{id}', 'JobController@cancelJob');
 });
 
 Route::post('node/mu_api_v2', 'HttpHelper@getSSNodesByMuApiV2');
