@@ -15,13 +15,16 @@ class CreateJobsTable extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('node_ip4');
-            $table->string('node_ip6');
+            $table->string('node_ip');
+            $table->string('node_ip4')->nullable();
+            $table->string('node_ip6')->nullable();
             $table->integer('port');
             $table->string('docker');
+            $table->text('config');
             $table->string('request_ip');
             $table->string('status');
-            $table->longText('log');
+            $table->longText('log')->nullable();
+            $table->unsignedBigInteger('time');
             $table->timestamps();
         });
     }

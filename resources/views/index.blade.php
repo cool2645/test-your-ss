@@ -16,7 +16,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-12">
-                    <select id="config-select" class="form-control">
+                    <select id="selectConfig" class="form-control">
                         <option value="mu_api_v2" selected>Mu Api v2</option>
                         <option value="2645network_ssr">2645Network SSR</option>
                         <option value="json">Json config</option>
@@ -56,7 +56,7 @@
             <section id="config-box-json" style="display: none">
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <textarea class="form-control" rows="3" placeholder="Paste your json config here"></textarea>
+                        <textarea id="json" class="form-control" rows="3" placeholder="Paste your json config here"></textarea>
                     </div>
                 </div>
             </section>
@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="col-sm-4 col-sm-offset-4">
-                <button type="button" class="btn btn-primary form-control">Launch a test Job</button>
+                <button id="launch-btn" type="button" class="btn btn-primary form-control">Launch a test Job</button>
             </div>
         </form>
 
@@ -78,23 +78,23 @@
 
     <script>
         $(document).ready(function () {
-            $("#config-select").change(function () {
-                if($("#config-select").val() == "mu_api_v2") {
+            $("#selectConfig").change(function () {
+                if($("#selectConfig").val() == "mu_api_v2") {
                     $("#config-box-mu").css("display", "initial");
                     $("#config-box-json").css("display", "none");
                 }
-                else if($("#config-select").val() == "2645network_ssr") {
+                else if($("#selectConfig").val() == "2645network_ssr") {
                     $("#config-box-mu").css("display", "initial");
                     $("#config-box-json").css("display", "none");
                 }
-                else if($("#config-select").val() == "json") {
+                else if($("#selectConfig").val() == "json") {
                     $("#config-box-mu").css("display", "none");
                     $("#config-box-json").css("display", "initial");
                 }
             });
             $("#refresh-node-list-btn").click(function () {
                 $.ajax({
-                    url: "/node/" + $("#config-select").val(),
+                    url: "/node/" + $("#selectConfig").val(),
                     method: "POST",
                     data: {
                         website: $("#website").val(),
@@ -125,6 +125,54 @@
                         } else {
                             $(".alert span").html("Undefined error.");
                             $(".alert").show();
+                        }
+                    }
+                })
+            });
+            $("#launch-btn").click(function () {
+                $("#launch-btn").html("Launching...");
+                $("#launch-btn").attr('disabled', 'disabled');
+                $.ajax({
+                    url: "/api/jobs",
+                    method: "POST",
+                    data: {
+                        config: $("#selectConfig").val(),
+                        website: $("#website").val(),
+                        email: $("#email").val(),
+                        password: $("#password").val(),
+                        node: $("#selectNode").val(),
+                        json: $("#json").val(),
+                        docker: $("#selectDocker").val()
+                    },
+                    success: function (msg) {
+                        var dataObj = eval("(" + msg + ")");
+                        if(dataObj == null) {
+                            $(".alert span").html("A exception occurred, you might inputted a wrong api url.");
+                            $(".alert").show();
+                            $("#launch-btn").html("Launch a test Job");
+                            $("#launch-btn").removeAttr('disabled');
+                        }
+                        if(!dataObj.result) {
+                            $(".alert span").html(dataObj.msg);
+                            $(".alert").show();
+                            $("#launch-btn").html("Launch a test Job");
+                            $("#launch-btn").removeAttr('disabled');
+                        }
+                        else {
+                            window.location.href = "/status";
+                        }
+                    },
+                    error: function (xhr) {
+                        if (xhr.status == 422) {
+                            $(".alert span").html("You should check in on some of those fields below.");
+                            $(".alert").show();
+                            $("#launch-btn").html("Launch a test Job");
+                            $("#launch-btn").removeAttr('disabled');
+                        } else {
+                            $(".alert span").html("Undefined error.");
+                            $(".alert").show();
+                            $("#launch-btn").html("Launch a test Job");
+                            $("#launch-btn").removeAttr('disabled');
                         }
                     }
                 })
