@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Job;
 
 class HomeController extends Controller
 {
@@ -13,11 +14,13 @@ class HomeController extends Controller
 
     public function status()
     {
-        return view('index');
+        $jobs = Job::orderBy('id', 'desc')->paginate(20);
+        return view('status', ['jobs' => $jobs]);
     }
 
-    public function about()
+    public function log($id)
     {
-        return view('index');
+        $job = Job::find($id);
+        return view('log', ['job' => $job]);
     }
 }

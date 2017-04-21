@@ -13,11 +13,11 @@
 
 Route::get('/', 'HomeController@launch');
 Route::get('/status', 'HomeController@status');
-Route::get('/about', 'HomeController@about');
+Route::get('/status/{id}', 'HomeController@log');
 
 Route::get('api/jobs', 'JobController@getJobList');
-Route::get('api/jobs/{id}', 'JobController@getJobStatus');
 Route::get('api/jobs/queue', 'JobController@getQueuingJobs');
+Route::get('api/jobs/{id}', 'JobController@getJobStatus');
 Route::get('api/jobs/{id}/log', 'JobController@showJobLog');
 Route::post('api/jobs', 'JobController@createJob');
 Route::get('api/jobs/{id}/judge', 'JobController@judge');
