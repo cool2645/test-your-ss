@@ -111,7 +111,7 @@ class JobController extends Controller
         $job->run_host = $request->run_host;
         $job->status = "Starting";
         $job->save();
-        return json_encode(['result' => true, 'msg' => "success"]);
+        return json_encode(['result' => true, 'msg' => "success", 'id' => $job->id, 'json' => $job->config, 'docker' => $job->docker]);
     }
 
     public function cancelJob($id)
@@ -133,16 +133,31 @@ class JobController extends Controller
     public function syncJobLog(Request $request, $id)
     {
         $job = Job::find($id);
-        if ($request->log != "")
+        if ($request->log != "") {
+            $request->log .= "\n";
             $job->status = "Running";
-        $job->log = $request->log;
+        }
+        $job->log .= $request->log;
         $job->save();
         return json_encode(['result' => true, 'msg' => "success"]);
     }
 
-    public function judge()
+    public function judge(Request $request, $id)
     {
-        //
+        if (isset($request->key) || (isset($request->admin_key) && $request->admin_key == env('ADMIN_KEY'))) {
+            $job = Job::find($id);
+            $job->status = "Pending";
+            $job->save();
+            if (($job->node_ip4 && strpos($job->log, $job->node_ip4) !== false)
+                || ($job->node_ip6 && strpos($job->log, $job->node_ip6) !== false)
+            )
+                $job->status = "Passing";
+            else
+                $job->status = "Failing";
+            $job->save();
+            return json_encode(['result' => true, 'msg' => $job->status]);
+        }
+        return json_encode(['result' => false, 'msg' => 'Authentication failure']);
     }
 
     public function reRun(Request $request, $id)

@@ -12,6 +12,26 @@
 
         <form class="form-horizontal" style="padding-top: 20px">
             <div class="form-group">
+                <label for="runhost" class="col-sm-2 control-label">Status</label>
+                <div class="col-sm-10" style="padding-top: 7px">
+                    @if($job->status == "Queuing")
+                        <a href="/status/{{ $job->id }}" class="btn btn-info">Queuing</a>
+                    @elseif($job->status == "Starting")
+                        <a href="/status/{{ $job->id }}" class="btn btn-warning">Starting</a>
+                    @elseif($job->status == "Running")
+                        <a href="/status/{{ $job->id }}" class="btn btn-warning">Running</a>
+                    @elseif($job->status == "Pending")
+                        <a href="/status/{{ $job->id }}" class="btn btn-warning">Pending</a>
+                    @elseif($job->status == "Passing")
+                        <a href="/status/{{ $job->id }}" class="btn btn-success">Passing</a>
+                    @elseif($job->status == "Failing")
+                        <a href="/status/{{ $job->id }}" class="btn btn-danger">Failing</a>
+                    @else
+                        <a href="/status/{{ $job->id }}" class="btn btn-default">Undefined</a>
+                    @endif
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="runhost" class="col-sm-2 control-label">Run Host</label>
                 <div class="col-sm-10" style="padding-top: 7px">
                     @if(isset($job->run_host))

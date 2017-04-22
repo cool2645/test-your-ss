@@ -44,10 +44,10 @@
                             @endif
                         </td>
                         <td>
-                            <button class="btn btn-danger">Rejudge</button>
+                            <button class="btn btn-danger" onclick="rejudge({{ $job->id }})">Rejudge</button>
                         </td>
                         <td>
-                            <button class="btn btn-danger">Rerun</button>
+                            <button class="btn btn-danger" onclick="rerun({{ $job->id }})">Rerun</button>
                         </td>
                     </tr>
                 @endforeach
@@ -57,4 +57,33 @@
 
     </div>
 
+    <script>
+        function rejudge(id) {
+            $.ajax({
+                url: "/api/jobs/" + id + '/judge',
+                method: "GET",
+            })
+        }
+        function rerun(id) {
+            $.ajax({
+                url: "/api/jobs/" + id,
+                data: "_method=PUT",
+                method: "POST",
+                success: function (msg) {
+                    var dataObj = eval("(" + msg + ")");
+                    if (dataObj == null) {
+                        $(".alert span").html("A exception occurred.");
+                        $(".alert").show();
+                    }
+                    else if (!dataObj.result) {
+                        $(".alert span").html(dataObj.msg);
+                        $(".alert").show();
+                    }
+                    else {
+                        history.go(0)
+                    }
+                }
+            })
+        }
+    </script>
 @endsection
