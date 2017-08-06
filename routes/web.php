@@ -11,9 +11,11 @@
 |
 */
 
-Route::get('/', 'HomeController@launch');
-Route::get('/status', 'HomeController@status');
-Route::get('/status/{id}', 'HomeController@log');
+Route::get('/', 'HomeController@home');
+
+Route::get('api/status', 'HomeController@status');
+Route::get('api/status/{id}', 'HomeController@log');
+Route::get('api/host', 'HostController@getStatus');
 
 Route::get('api/jobs', 'JobController@getJobList');
 Route::get('api/jobs/queue', 'JobController@getQueuingJobs');
@@ -27,6 +29,7 @@ Route::group(['middleware' => 'apiauth'], function () {
     Route::post('api/jobs/{id}', 'JobController@assignJob');
     Route::post('api/jobs/{id}/log', 'JobController@syncJobLog');
     Route::delete('api/jobs/{id}', 'JobController@cancelJob');
+    Route::post('api/host/{hostname}', 'HostController@syncStatus');
 });
 
 Route::post('node/mu_api_v2', 'HttpHelper@getSSNodesByMuApiV2');

@@ -7,7 +7,7 @@ use App\Job;
 
 class HomeController extends Controller
 {
-    public function launch()
+    public function home()
     {
         return view('index');
     }
@@ -15,12 +15,12 @@ class HomeController extends Controller
     public function status()
     {
         $jobs = Job::orderBy('id', 'desc')->paginate(20);
-        return view('status', ['jobs' => $jobs]);
+        return json_encode(['result' => true, 'jobs' => $jobs]);
     }
 
     public function log($id)
     {
         $job = Job::find($id);
-        return view('log', ['job' => $job]);
+        return json_encode(['result' => true, 'job' => $job]);
     }
 }

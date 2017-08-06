@@ -144,18 +144,15 @@ class JobController extends Controller
 
     public function judge(Request $request, $id)
     {
-        if (isset($request->key) || (isset($request->admin_key) && $request->admin_key == env('ADMIN_KEY'))) {
-            $job = Job::find($id);
-            $job->status = "Pending";
-            $job->save();
-            if (strpos($job->log, "callback") !== false)
-                $job->status = "Passing";
-            else
-                $job->status = "Failing";
-            $job->save();
-            return json_encode(['result' => true, 'msg' => $job->status]);
-        }
-        return json_encode(['result' => false, 'msg' => 'Authentication failure']);
+        $job = Job::find($id);
+        $job->status = "Pending";
+        $job->save();
+        if (strpos($job->log, "callback") !== false)
+            $job->status = "Passing";
+        else
+            $job->status = "Failing";
+        $job->save();
+        return json_encode(['result' => true, 'msg' => $job->status]);
     }
 
     public function reRun(Request $request, $id)
