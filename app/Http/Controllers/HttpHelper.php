@@ -115,6 +115,32 @@ class HttpHelper extends Controller
         }
     }
 
+    static public function getSSConfigByMuApiV2Token($website, $token, $user_id, $node)
+    {
+
+        $url = $website . "/user/" . $user_id;
+        $get_data = array(
+            "access_token" => $token
+        );
+        $data = self::curl_get($url, $get_data);
+
+        $data = json_decode($data, true);
+        if ($data['ret'] == 0)
+            return false;
+        else {
+            $node = explode(':', $node);
+            $method = $node[1];
+            $node = $node[0];
+            $config = [
+                'server' => $node,
+                'server_port' => $data['data']['port'],
+                'password' => $data['data']['passwd'],
+                'method' => $method == "custom_method" ? $data['data']['method'] : $method
+            ];
+            return json_encode($config);
+        }
+    }
+
     static public function getSSConfigByMuApiV2($website, $email, $password, $node)
     {
         $url = $website . "/token";

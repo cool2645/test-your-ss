@@ -47,6 +47,16 @@ class JobController extends Controller
                 $node_addr = explode(':', $request->node)[0];
                 $json = HttpHelper::getSSConfigByMuApiV2($request->website, $request->email, $request->password, $request->node);
                 break;
+            case "mu_api_v2_token":
+                $this->validate($request, [
+                    "website" => "required",
+                    "token" => "required",
+                    "user_id" => "required",
+                    "node" => "required"
+                ]);
+                $node_addr = explode(':', $request->node)[0];
+                $json = HttpHelper::getSSConfigByMuApiV2Token($request->website, $request->token, $request->user_id, $request->node);
+                break;
             case "2645network_ssr":
                 $this->validate($request, [
                     "website" => "required",
