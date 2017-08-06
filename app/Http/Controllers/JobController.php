@@ -89,7 +89,7 @@ class JobController extends Controller
                 $job->save();
                 return json_encode(['result' => true, 'data' => ['ip' => $ip[0], 'ip4' => $ip[1], 'ip6' => $ip[2]]]);
             } else
-                return json_encode(['result' => false, 'msg' => "Unknown host", 'data' => ['ip' => $ip[0], 'ip4' => $ip[1], 'ip6' => $ip[2]]]);
+                return json_encode(['result' => false, 'msg' => "Unknown host", 'data' => ['host' => $node_addr, 'ip' => $ip[0], 'ip4' => $ip[1], 'ip6' => $ip[2]]]);
         } else
             return json_encode(['result' => false, 'msg' => 'You can only open ' . env('ALLOW_TIMES', 3) . " times in " . env('ALLOW_EACH_HOUR', 5) . " hours."]);
 
