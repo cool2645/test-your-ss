@@ -6,11 +6,10 @@ The program has to work with a test host compatible with the api.
 
 Currently available test host:
 
- NULL
++ [test-your-ss-host](https://github.com/2645Corp/test-your-ss-host)
 
 Under development test host:
 
-+ [test-your-ss-host](https://github.com/2645Corp/test-your-ss-host)
 + [test-your-ss-host-go](https://github.com/2645Corp/test-your-ss-host-go)
 
 ## About SS Config

@@ -148,9 +148,7 @@ class JobController extends Controller
             $job = Job::find($id);
             $job->status = "Pending";
             $job->save();
-            if (($job->node_ip4 && strpos($job->log, $job->node_ip4) !== false)
-                || ($job->node_ip6 && strpos($job->log, $job->node_ip6) !== false)
-            )
+            if (strpos($job->log, "callback") !== false)
                 $job->status = "Passing";
             else
                 $job->status = "Failing";
