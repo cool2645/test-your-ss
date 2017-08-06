@@ -14,6 +14,8 @@
 header('Access-Control-Allow-Origin: *');
 
 Route::get('/', 'HomeController@home');
+Route::get('/status', 'HomeController@home_status');
+Route::get('/status/{id}', 'HomeController@home_log');
 
 Route::get('api/status', 'HomeController@status');
 Route::get('api/status/port/{port}', 'HomeController@status_port');

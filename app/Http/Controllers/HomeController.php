@@ -12,6 +12,17 @@ class HomeController extends Controller
         return view('index');
     }
 
+    public function home_status()
+    {
+        $jobs = Job::orderBy('id', 'desc')->paginate(20);
+        return view('status', ['jobs' => $jobs]);
+    }
+    public function home_log($id)
+    {
+        $job = Job::find($id);
+        return view('log', ['job' => $job]);
+    }
+
     public function status()
     {
         $jobs = Job::select('id', 'node_addr', "docker", "port", "request_ip", "status", "run_host", "log")->orderBy('id', 'desc')->paginate(20);
