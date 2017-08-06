@@ -14,7 +14,13 @@ class HomeController extends Controller
 
     public function status()
     {
-        $jobs = Job::orderBy('id', 'desc')->paginate(20);
+        $jobs = Job::select('id', 'node_addr', "docker", "port", "request_ip", "status", "run_host", "log")->orderBy('id', 'desc')->paginate(20);
+        return json_encode(['result' => true, 'jobs' => $jobs]);
+    }
+
+    public function status_port($port)
+    {
+        $jobs = Job::where('port', $port)->select('id', 'node_addr', "docker", "port", "request_ip", "status", "run_host", "log")->orderBy('id', 'desc')->paginate(20);
         return json_encode(['result' => true, 'jobs' => $jobs]);
     }
 
