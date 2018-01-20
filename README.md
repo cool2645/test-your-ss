@@ -8,10 +8,6 @@ Currently available test host:
 
 + [test-your-ss-host](https://github.com/2645Corp/test-your-ss-host)
 
-Under development test host:
-
-+ [test-your-ss-host-go](https://github.com/2645Corp/test-your-ss-host-go)
-
 ## About SS Config
 
 The program supports several method of getting ss/ssr config.
